@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -20,6 +21,7 @@ export default class List {
   color: string;
 
   @ManyToOne(() => User, (user) => user.lists)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @OneToMany(() => ListItem, (list_item) => list_item.list)

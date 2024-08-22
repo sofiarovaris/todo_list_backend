@@ -7,9 +7,9 @@ exports.up = function (knex) {
     if (!exists) {
       return knex.schema.createTable('users', function (table) {
         table.increments('id');
-        table.string('username').notNullable();
+        table.string('name').notNullable();
         table.string('email').notNullable();
-        table.string('password').notNullable();
+        table.string('password').nullable();
       });
     }
   });

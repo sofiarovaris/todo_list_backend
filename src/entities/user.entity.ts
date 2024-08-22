@@ -12,7 +12,7 @@ export default class User {
   @Column({ type: 'varchar' })
   email: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   password: string;
 
   @OneToMany(() => List, (list) => list.user)
