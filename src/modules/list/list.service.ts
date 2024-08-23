@@ -38,7 +38,9 @@ export class ListService {
   }
 
   async getLists(): Promise<List[]> {
-    return await this.listRepository.find();
+    return await this.listRepository.find({
+      relations: ['items'],
+    });
   }
 
   async existList(id: number): Promise<boolean> {

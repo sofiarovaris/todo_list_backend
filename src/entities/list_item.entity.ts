@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,5 +20,6 @@ export default class ListItem {
   is_done: boolean;
 
   @ManyToOne(() => List, (list) => list.items)
+  @JoinColumn({ name: 'list_id' })
   list: List;
 }
