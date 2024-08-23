@@ -5,11 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { UserService } from '../user/user.service';
+import ListItem from 'src/entities/list_item.entity';
 
 @Injectable()
 export class ListService {
   constructor(
     @InjectRepository(List) private readonly listRepository: Repository<List>,
+    @InjectRepository(ListItem)
+    private readonly listItemRepository: Repository<ListItem>,
     private readonly userService: UserService,
   ) {}
 
@@ -34,7 +37,18 @@ export class ListService {
   }
 
   async deleteList(id: number) {
-    await this.listRepository.delete({ id });
+    const list = await this.listRepository.findOne({
+      where: { id },
+      relations: ['items'],
+    });
+
+    const deleteItemPromises = list.items.map(async (item) => {
+      return this.listItemRepository.delete({ id: item.id });
+    });
+
+    await Promise.all(deleteItemPromises);
+
+    return await this.listRepository.delete({ id });
   }
 
   async getLists(): Promise<List[]> {
