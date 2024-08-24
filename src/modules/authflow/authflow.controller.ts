@@ -1,6 +1,7 @@
 // src/modules/authflow/authflow.controller.ts
 import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { AuthFlowInterface } from './authflow.interface';
+import { LoginDto } from './dto/user-from-token.dto';
 
 @Controller('auth')
 export class AuthflowController {
@@ -10,11 +11,11 @@ export class AuthflowController {
   ) {}
 
   @Post('login')
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    const user = await this.authFlowService.validateUser(email, password);
-    return this.authFlowService.login(user);
+  async login(@Body() loginDto: LoginDto) {
+    const user = await this.authFlowService.validateUser(
+      loginDto.email,
+      loginDto.password,
+    );
+    return await this.authFlowService.login(user);
   }
 }

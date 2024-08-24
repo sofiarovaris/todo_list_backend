@@ -10,7 +10,7 @@ import { AuthflowController } from './authflow.controller';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET || 'defaultSecret',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '60m' },
     }),
     UserModule,
   ],

@@ -66,4 +66,11 @@ export class ListItemService {
       is_done: false,
     });
   }
+
+  async getListItemById(id: number): Promise<ListItem> {
+    return await this.listItemRepository.findOne({
+      where: { id },
+      relations: ['list.user'],
+    });
+  }
 }

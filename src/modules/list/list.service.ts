@@ -13,7 +13,6 @@ export class ListService {
     @InjectRepository(List) private readonly listRepository: Repository<List>,
     @InjectRepository(ListItem)
     private readonly listItemRepository: Repository<ListItem>,
-    private readonly userService: UserService,
   ) {}
 
   async createList(userId: number, createListDto: CreateListDto) {
@@ -51,8 +50,13 @@ export class ListService {
     return await this.listRepository.delete({ id });
   }
 
-  async getLists(): Promise<List[]> {
+  async getListsByUser(userId: number): Promise<List[]> {
     return await this.listRepository.find({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
       relations: ['items'],
     });
   }
@@ -60,6 +64,13 @@ export class ListService {
   async existList(id: number): Promise<boolean> {
     return await this.listRepository.exists({
       where: { id },
+    });
+  }
+
+  async getListById(id: number): Promise<List> {
+    return await this.listRepository.findOne({
+      where: { id },
+      relations: ['user'],
     });
   }
 }

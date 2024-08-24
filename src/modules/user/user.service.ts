@@ -9,8 +9,14 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async getUser(id: number): Promise<User> {
-    return await this.userRepository.findOneBy({ id });
+  async getUser(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    };
   }
 
   async existUser(id: number): Promise<boolean> {
@@ -19,7 +25,7 @@ export class UserService {
     });
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
+  async findByEmail(email: string): Promise<User> {
     return this.userRepository.findOne({ where: { email } });
   }
 }

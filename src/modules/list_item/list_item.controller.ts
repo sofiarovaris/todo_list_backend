@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
 import { ListItemService } from './list_item.service';
 import { CreateListItemDto } from './dto/create-item-dto';
@@ -22,33 +23,52 @@ export class ListItemController {
   async createListItem(
     @Param('listId') listId: number,
     @Body() createListItemDto: CreateListItemDto,
+    @Req() req,
   ) {
-    const existList = await this.listService.existList(listId);
+    const list = await this.listService.getListById(listId);
 
-    if (!existList) {
+    if (!list) {
       throw new NotFoundException('List not found');
     }
 
-    return this.listItemService.createListItem(listId, createListItemDto);
+    if (req.user.id !== list.user.id) {
+      throw new NotFoundException(
+        'Trying to create list item for another user list',
+      );
+    }
+
+    return await this.listItemService.createListItem(listId, createListItemDto);
   }
 
-  @Post(':id/done')
-  async markListItemAsDone(@Param('id') id: number) {
-    const existListItem = await this.listItemService.existListItem(id);
+  @Put(':id/done')
+  async markListItemAsDone(@Param('id') id: number, @Req() req) {
+    const listItem = await this.listItemService.getListItemById(id);
 
-    if (!existListItem) {
+    if (!listItem) {
       throw new NotFoundException('List item not found');
     }
 
-    return this.listItemService.markListItemAsDone(id);
+    if (req.user.id !== listItem.list.user.id) {
+      throw new NotFoundException(
+        'Trying to mark list item as done for another user list',
+      );
+    }
+
+    return await this.listItemService.markListItemAsDone(id);
   }
 
-  @Post(':id/undone')
-  async markListItemAsUndone(@Param('id') id: number) {
-    const existListItem = await this.listItemService.existListItem(id);
+  @Put(':id/undone')
+  async markListItemAsUndone(@Param('id') id: number, @Req() req) {
+    const listItem = await this.listItemService.getListItemById(id);
 
-    if (!existListItem) {
+    if (!listItem) {
       throw new NotFoundException('List item not found');
+    }
+
+    if (req.user.id !== listItem.list.user.id) {
+      throw new NotFoundException(
+        'Trying to mark list item as undone for another user list',
+      );
     }
 
     return this.listItemService.markListItemAsUndone(id);
@@ -58,22 +78,35 @@ export class ListItemController {
   async updateListItem(
     @Param('id') id: number,
     @Body() updateListItemDto: CreateListItemDto,
+    @Req() req,
   ) {
-    const existListItem = await this.listItemService.existListItem(id);
+    const listItem = await this.listItemService.getListItemById(id);
 
-    if (!existListItem) {
+    if (!listItem) {
       throw new NotFoundException('List item not found');
+    }
+
+    if (req.user.id !== listItem.list.user.id) {
+      throw new NotFoundException(
+        'Trying to update list item for another user list',
+      );
     }
 
     return this.listItemService.updateListItem(id, updateListItemDto);
   }
 
   @Delete(':id')
-  async deleteListItem(@Param('id') id: number) {
-    const existListItem = await this.listItemService.existListItem(id);
+  async deleteListItem(@Param('id') id: number, @Req() req) {
+    const listItem = await this.listItemService.getListItemById(id);
 
-    if (!existListItem) {
+    if (!listItem) {
       throw new NotFoundException('List item not found');
+    }
+
+    if (req.user.id !== listItem.list.user.id) {
+      throw new NotFoundException(
+        'Trying to delete list item for another user list',
+      );
     }
 
     return this.listItemService.deleteListItem(id);
