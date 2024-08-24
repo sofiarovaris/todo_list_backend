@@ -4,6 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EntitiesList } from './entities';
 import { ListModule } from './modules/list/list.module';
 import { ListItemModule } from './modules/list_item/list_item.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './guards/auth.guard';
+import { UserModule } from './modules/user/user.module';
+import { AuthflowModule } from './modules/authflow/authflow.module';
 
 @Module({
   imports: [
@@ -18,8 +22,15 @@ import { ListItemModule } from './modules/list_item/list_item.module';
     }),
     ListModule,
     ListItemModule,
+    UserModule,
+    AuthflowModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
