@@ -34,7 +34,7 @@ export class ListController {
       throw new NotFoundException('User not found');
     }
 
-    if (req.user.id !== params.userId) {
+    if (req.user.id !== Number(params.userId)) {
       throw new ForbiddenException('Trying to create list for another user');
     }
 
@@ -68,7 +68,7 @@ export class ListController {
       throw new NotFoundException('User not found');
     }
 
-    if (req.user.id !== params.userId) {
+    if (req.user.id !== Number(params.userId)) {
       throw new ForbiddenException('Trying to get lists for another user');
     }
 
