@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { IsHexColor } from 'src/validators/ishexcolor';
+import { IsHexColor } from '../../../validators/ishexcolor';
 
 export class CreateListDto {
   @ApiProperty()

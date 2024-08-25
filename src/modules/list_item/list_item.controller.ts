@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   NotFoundException,
   Param,
   Post,
@@ -32,7 +33,7 @@ export class ListItemController {
     }
 
     if (req.user.id !== list.user.id) {
-      throw new NotFoundException(
+      throw new ForbiddenException(
         'Trying to create list item for another user list',
       );
     }
@@ -49,7 +50,7 @@ export class ListItemController {
     }
 
     if (req.user.id !== listItem.list.user.id) {
-      throw new NotFoundException(
+      throw new ForbiddenException(
         'Trying to mark list item as done for another user list',
       );
     }
@@ -66,7 +67,7 @@ export class ListItemController {
     }
 
     if (req.user.id !== listItem.list.user.id) {
-      throw new NotFoundException(
+      throw new ForbiddenException(
         'Trying to mark list item as undone for another user list',
       );
     }
@@ -87,7 +88,7 @@ export class ListItemController {
     }
 
     if (req.user.id !== listItem.list.user.id) {
-      throw new NotFoundException(
+      throw new ForbiddenException(
         'Trying to update list item for another user list',
       );
     }
@@ -104,7 +105,7 @@ export class ListItemController {
     }
 
     if (req.user.id !== listItem.list.user.id) {
-      throw new NotFoundException(
+      throw new ForbiddenException(
         'Trying to delete list item for another user list',
       );
     }

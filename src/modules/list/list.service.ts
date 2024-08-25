@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import List from 'src/entities/list.entity';
+import List from '../../entities/list.entity';
 import { Repository } from 'typeorm';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { UserService } from '../user/user.service';
-import ListItem from 'src/entities/list_item.entity';
+import ListItem from '../../entities/list_item.entity';
 
 @Injectable()
 export class ListService {

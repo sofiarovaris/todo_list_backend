@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import ListItem from 'src/entities/list_item.entity';
+import ListItem from '../../entities/list_item.entity';
 import { Repository } from 'typeorm';
 import { CreateListItemDto } from './dto/create-item-dto';
 import { UpdateListItemDto } from './dto/update-item-dto';
@@ -10,7 +10,6 @@ export class ListItemService {
   constructor(
     @InjectRepository(ListItem)
     private readonly listItemRepository: Repository<ListItem>,
-    // private readonly userService: UserService,
   ) {}
 
   async createListItem(
@@ -39,8 +38,8 @@ export class ListItemService {
     });
   }
 
-  async deleteListItem(id: number): Promise<void> {
-    await this.listItemRepository.delete({ id });
+  async deleteListItem(id: number) {
+    return await this.listItemRepository.delete({ id });
   }
 
   async existListItem(id: number): Promise<boolean> {
