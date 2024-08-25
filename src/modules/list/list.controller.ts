@@ -14,7 +14,17 @@ import { ListService } from './list.service';
 import { CreateListDto } from './dto/create-list.dto';
 import { UserService } from '../user/user.service';
 import { UpdateListDto } from './dto/update-list.dto';
+import {
+  ApiTags,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 
+@ApiTags('lists')
 @Controller('lists')
 export class ListController {
   constructor(
@@ -23,6 +33,13 @@ export class ListController {
   ) {}
 
   @Post(':userId')
+  @ApiCreatedResponse({ description: 'Create list' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  @ApiForbiddenResponse({
+    description: 'Trying to create list for another user',
+  })
+  @ApiParam({ name: 'userId', type: Number, description: 'ID of the user' })
+  @ApiBody({ type: CreateListDto })
   async createList(
     @Param() params: { userId: number },
     @Body() createListDto: CreateListDto,
@@ -42,6 +59,13 @@ export class ListController {
   }
 
   @Put(':id')
+  @ApiOkResponse({ description: 'Update list' })
+  @ApiNotFoundResponse({ description: 'List not found' })
+  @ApiForbiddenResponse({
+    description: 'Trying to update list for another user',
+  })
+  @ApiParam({ name: 'id', type: Number, description: 'ID of the list' })
+  @ApiBody({ type: UpdateListDto })
   async updateList(
     @Param() params: { id: number },
     @Body() updateListDto: UpdateListDto,
@@ -61,6 +85,12 @@ export class ListController {
   }
 
   @Get(':userId')
+  @ApiOkResponse({ description: 'Get lists by user' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  @ApiForbiddenResponse({
+    description: 'Trying to get lists for another user',
+  })
+  @ApiParam({ name: 'userId', type: Number, description: 'ID of the user' })
   async getListsByUser(@Param() params: { userId: number }, @Req() req) {
     const userExists = await this.userService.existUser(params.userId);
 
@@ -76,6 +106,12 @@ export class ListController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({ description: 'Delete list' })
+  @ApiNotFoundResponse({ description: 'List not found' })
+  @ApiForbiddenResponse({
+    description: 'Trying to delete list for another user',
+  })
+  @ApiParam({ name: 'id', type: Number, description: 'ID of the list' })
   async deleteList(@Param() params: { id: number }, @Req() req) {
     const list = await this.listService.getListById(params.id);
 

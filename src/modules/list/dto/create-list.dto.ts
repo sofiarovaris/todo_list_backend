@@ -3,12 +3,12 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import { IsHexColor } from '../../../validators/ishexcolor';
 
 export class CreateListDto {
-  @ApiProperty()
+  @ApiProperty({ description: 'The name of the list.' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The color of the list in hex format.' })
   @IsHexColor()
   @IsNotEmpty()
   color: string;
