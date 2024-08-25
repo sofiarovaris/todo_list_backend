@@ -1,4 +1,3 @@
-// src/modules/authflow/flows/cognito.authflow.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   CognitoIdentityProviderClient,

@@ -1,7 +1,6 @@
-// src/modules/authflow/authflow.controller.ts
 import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { AuthFlowInterface } from './authflow.interface';
-import { LoginDto } from './dto/user-from-token.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthflowController {

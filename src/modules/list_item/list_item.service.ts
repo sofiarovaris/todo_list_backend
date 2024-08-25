@@ -12,10 +12,13 @@ export class ListItemService {
     private readonly listItemRepository: Repository<ListItem>,
   ) {}
 
-  async createListItem(
-    listId: number,
-    listItemDto: CreateListItemDto,
-  ): Promise<ListItem> {
+  /**
+   * Creates a new list item.
+   * @param listId - The ID of the list to which the item belongs.
+   * @param listItemDto - The data transfer object containing the details of the list item.
+   * @returns The created list item.
+   */
+  async createListItem(listId: number, listItemDto: CreateListItemDto) {
     const listItem = this.listItemRepository.create({
       ...listItemDto,
       list: {
@@ -26,10 +29,13 @@ export class ListItemService {
     return await this.listItemRepository.save(listItem);
   }
 
-  async updateListItem(
-    id: number,
-    updateListItemDto: UpdateListItemDto,
-  ): Promise<ListItem> {
+  /**
+   * Updates an existing list item.
+   * @param id - The ID of the list item to update.
+   * @param updateListItemDto - The data transfer object containing the updated details of the list item.
+   * @returns The updated list item.
+   */
+  async updateListItem(id: number, updateListItemDto: UpdateListItemDto) {
     const listItem = await this.listItemRepository.findOneBy({ id });
 
     return await this.listItemRepository.save({
@@ -38,17 +44,32 @@ export class ListItemService {
     });
   }
 
+  /**
+   * Deletes a list item by its ID.
+   * @param id - The ID of the list item to delete.
+   * @returns The result of the delete operation.
+   */
   async deleteListItem(id: number) {
     return await this.listItemRepository.delete({ id });
   }
 
-  async existListItem(id: number): Promise<boolean> {
+  /**
+   * Checks if a list item exists by its ID.
+   * @param id - The ID of the list item to check.
+   * @returns A boolean indicating whether the list item exists.
+   */
+  async existListItem(id: number) {
     return await this.listItemRepository.exists({
       where: { id },
     });
   }
 
-  async markListItemAsDone(id: number): Promise<ListItem> {
+  /**
+   * Marks a list item as done.
+   * @param id - The ID of the list item to mark as done.
+   * @returns The updated list item with the is_done flag set to true.
+   */
+  async markListItemAsDone(id: number) {
     const listItem = await this.listItemRepository.findOneBy({ id });
 
     return await this.listItemRepository.save({
@@ -57,7 +78,12 @@ export class ListItemService {
     });
   }
 
-  async markListItemAsUndone(id: number): Promise<ListItem> {
+  /**
+   * Marks a list item as undone.
+   * @param id - The ID of the list item to mark as undone.
+   * @returns The updated list item with the is_done flag set to false.
+   */
+  async markListItemAsUndone(id: number) {
     const listItem = await this.listItemRepository.findOneBy({ id });
 
     return await this.listItemRepository.save({
@@ -66,7 +92,12 @@ export class ListItemService {
     });
   }
 
-  async getListItemById(id: number): Promise<ListItem> {
+  /**
+   * Retrieves a list item by its ID.
+   * @param id - The ID of the list item to retrieve.
+   * @returns The list item with its associated list and user.
+   */
+  async getListItemById(id: number) {
     return await this.listItemRepository.findOne({
       where: { id },
       relations: ['list.user'],

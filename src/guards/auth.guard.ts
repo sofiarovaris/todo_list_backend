@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
 
     const { url } = request;
 
+    // The login endpoint should be accessible without a token
     if (url === '/auth/login') {
       return true;
     }
