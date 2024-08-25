@@ -8,9 +8,16 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 import { UserModule } from './modules/user/user.module';
 import { AuthflowModule } from './modules/authflow/authflow.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     TypeOrmModule.forRoot({
       type: 'mariadb',
       host: process.env.DB_HOST,
@@ -30,6 +37,10 @@ import { AuthflowModule } from './modules/authflow/authflow.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })

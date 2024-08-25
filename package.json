@@ -31,6 +31,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.3.2",
     "@nestjs/swagger": "^7.4.0",
+    "@nestjs/throttler": "^6.2.1",
     "@nestjs/typeorm": "^10.0.2",
     "aws-jwt-verify": "^4.0.1",
     "aws-sdk": "^2.1679.0",
